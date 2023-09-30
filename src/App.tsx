@@ -48,7 +48,27 @@ function App() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ id: newGame })
-      }).then(r => r.json())
+      }).then(r => {
+        if (r.status === 409) {
+          if (games[newGame]) {
+            setScreen(newGame)
+          } else {
+            alert('Game already exists, please refresh the page and select it.')
+          }
+          throw new Error('Game already exists')
+        } else if (r.status === 503) {
+          alert(`${newGame} may be offline, please confirm it is online and try again.`)
+          throw new Error('Player offline')
+        } else if (r.status === 400) {
+          alert('Please enter a valid player ID')
+          throw new Error('Invalid player ID')
+        } else if (r.status > 399) {
+          alert('There was an error creating the game. Please try again.')
+          throw new Error('Error creating game')
+        }
+
+        return r.json()
+      })
 
       const allGames = { ...games }
       allGames[createdGame.id] = createdGame
@@ -57,7 +77,6 @@ function App() {
       setNewGame('')
     } catch (err) {
       console.error(err)
-      alert('You could not create the game. Please make sure your current game with this player (if any) has ended and try again.')
     }
   }, [games, newGame, setNewGame, set])
 
@@ -150,10 +169,13 @@ function App() {
 
   return (
     <div className='flex flex-col justify-center items-center'>
-      <div className='flex flex-col justify-center' style={{ maxHeight: '100vh', maxWidth: '800px', width: '100%' }}>
+      <div className='flex flex-col justify-center' style={{ maxHeight: '100vh', maxWidth: '800px', width: '100%', position: 'relative' }}>
+        <a href="/" className='absolute top-6 left-0 m-4' style={{ fontSize: 24, color: 'white' }} onClick={e => { e.preventDefault(); window.history.back() }}>
+          &#x25c0; Back
+        </a>
         <h1 className='m-4'>Chess by Uqbar</h1>
         <div className='flex flex-row justify-center items-center h-screen border rounded'>
-          <div className='flex flex-col border-r' style={{ width: '25%', height: '100%' }}>
+          {Object.keys(games).length > 0 && <div className='flex flex-col border-r' style={{ width: '25%', height: '100%' }}>
             <h3 className='m-2'>Games</h3>
             <button className='bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 m-2 rounded' onClick={() => setScreen('new')}>New</button>
             <div className='flex flex-col overflow-scroll'>
@@ -165,7 +187,7 @@ function App() {
                 </div>
               ))}
             </div>
-          </div>
+          </div>}
           <div className='flex flex-col justify-center items-center' style={{ width: '75%' }}>
             {screen === 'new' || !game ? (
               <>
