@@ -210,7 +210,7 @@ function App() {
                     <button className='bg-green-600 hover:bg-green-800 text-white font-bold py-1 px-4 rounded' onClick={resignGame}>Resign</button>
                   )}
                 </div>
-                <Chessboard position={game?.game.fen()} onPieceDrop={onDrop} />
+                <Chessboard position={game?.game.fen()} onPieceDrop={onDrop} boardOrientation={game?.white === window.our.node ? 'white' : 'black'} />
               </>
             )}
           </div>
