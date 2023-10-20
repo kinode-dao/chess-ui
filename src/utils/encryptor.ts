@@ -1,8 +1,8 @@
 import forge from 'node-forge'
 import { Buffer } from 'buffer'
 
-const genFetchRoute = (route: string) => (window.location.pathname.includes('/http-proxy/serve/') ?
-`/http-proxy/serve/${window.location.pathname.split('/')[3]}/${route}`: route).replace('//', '/')
+const genFetchRoute = (route: string) => (window.location.pathname.includes('/http_proxy:http_proxy:uqbar/serve/') ?
+`/http_proxy:http_proxy:uqbar/serve/${window.location.pathname.split('/')[3]}/${route}`: route).replace('//', '/')
 
 function getCookie(name: string) {
   const cookies = document.cookie.split(';')
@@ -112,7 +112,7 @@ export default class UqbarEncryptorApi {
 
     const publicKeyHex = keypair.publicKey.n.toString(16) // eslint-disable-line
 
-    fetch(genFetchRoute('/encryptor'), {
+    fetch(genFetchRoute('/encryptor:sys:uqbar'), {
       method: 'POST',
       body: JSON.stringify({
         channel_id: channelId,

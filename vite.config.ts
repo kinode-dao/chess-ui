@@ -38,7 +38,7 @@ export default defineConfig({
   server: {
     https: false,
     proxy: {
-      "/encryptor": {
+      "/encryptor:sys:uqbar": {
         target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
