@@ -120,8 +120,8 @@ export default class UqbarEncryptorApi {
       })
     }).then(r => r.json()).then((json: { encrypted_secret: string, signed_public_key: string }) => {
       const { encrypted_secret, signed_public_key } = json
-      fetch(`/qns-indexer/node/${this.nodeId}`).then(r => r.json()).then((pqi: any) => { // eslint-disable-line
-        const { QnsUpdate: { public_key } } = pqi
+      fetch(`/qns_indexer:qns_indexer:uqbar/node/${this.nodeId}`).then(r => r.json()).then((pqi: any) => { // eslint-disable-line
+        const { public_key } = pqi
         // get the public key from the json
         const networkingPublicKey = public_key.replace('0x', '')
 

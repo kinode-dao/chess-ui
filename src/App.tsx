@@ -33,7 +33,7 @@ function App() {
       new UqbarEncryptorApi({ nodeId: window.our.node, channelId: window.our.process, onMessage: handleWsMessage })
     }
 
-    fetch('/chess/games').then(res => res.json()).then((games) => {
+    fetch('/chess:chess:uqbar/games').then(res => res.json()).then((games) => {
       set({ games })
     }).catch(console.error)
 
@@ -42,7 +42,7 @@ function App() {
   const startNewGame = useCallback(async (e: FormEvent) => {
     e.preventDefault()
     try {
-      const createdGame = await fetch('/chess/games', {
+      const createdGame = await fetch('/chess:chess:uqbar/games', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -100,7 +100,7 @@ function App() {
     allGames[game.id] = gameCopy
     set({ games: allGames })
 
-    fetch('/chess/games', {
+    fetch('/chess:chess:uqbar/games', {
       method: 'PUT',
       body: JSON.stringify({ id: game.id, move: sourceSquare + targetSquare })
     }).then(r => r.json())
@@ -130,7 +130,7 @@ function App() {
 
     if (!window.confirm('Are you sure you want to resign this game?')) return
 
-    fetch(`/chess/games?id=${game.id}`, {
+    fetch(`/chess:chess:uqbar/games?id=${game.id}`, {
       method: 'DELETE',
     }).then(r => r.json())
     .then((updatedGame) => {
@@ -150,7 +150,7 @@ function App() {
     if (!game) return
 
     try {
-      const createdGame = await fetch('/chess/games', {
+      const createdGame = await fetch('/chess:chess:uqbar/games', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
