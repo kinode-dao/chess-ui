@@ -27,11 +27,15 @@ const useChessStore = create<ChessStore>()(
     (set, get) => ({
       games: {},
       handleWsMessage: (json: string) => {
-        const { kind, data } = JSON.parse(json) as WsMessage
-        console.log(kind, data)
+        try {
+          const { kind, data } = JSON.parse(json) as WsMessage
+          console.log(kind, data)
 
-        if (kind === 'game_update') {
-          set({ games: { ...get().games, [data.id]: data } })
+          if (kind === 'game_update') {
+            set({ games: { ...get().games, [data.id]: data } })
+          }
+        } catch (error) {
+          console.error("Error parsing WebSocket message", error);
         }
       },
       set,
