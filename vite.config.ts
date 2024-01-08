@@ -5,15 +5,15 @@ import react from '@vitejs/plugin-react'
 If you are developing a UI outside of an Uqbar project,
 comment out the following 2 lines:
 */
-// import manifest from '../uqbar/modules/chess/pkg/manifest.json'
-// import metadata from '../uqbar/modules/chess/pkg/metadata.json'
+// import manifest from '../pkg/manifest.json'
+// import metadata from '../pkg/metadata.json'
 
 /*
 IMPORTANT:
 This must match the process name from pkg/manifest.json + pkg/metadata.json
 The format is "/" + "process_name:package_name:publisher_node"
 */
-const BASE_URL = '/chess:chess:uqbar';
+const BASE_URL = '/chess:chess:nectar';
 
 // This is the proxy URL, it must match the node you are developing against
 const PROXY_URL = (process.env.VITE_NODE_URL || 'http://127.0.0.1:8080').replace('localhost', '127.0.0.1');
