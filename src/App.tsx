@@ -1,7 +1,7 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState, MouseEvent } from 'react'
 import { Chess } from "chess.js";
 import { Chessboard } from "react-chessboard";
-import UqbarEncryptorApi from './utils/encryptor'
+import UqbarEncryptorApi from '@uqbar/client-encryptor-api'
 import useChessStore, { Game } from './store';
 
 declare global {
@@ -19,6 +19,16 @@ interface SelectedGame extends Game {
 
 const isTurn = (game: Game, node: string) => (game.turns || 0) % 2 === 0 ? node === game.white : node === game.black
 
+const BASE_URL = import.meta.env.BASE_URL;
+if (window.our) window.our.process = BASE_URL?.replace("/", "");
+
+const PROXY_TARGET = `${(import.meta.env.VITE_NODE_URL || "http://localhost:8080")}${BASE_URL}`;
+
+// This env also has BASE_URL which should match the process + package name
+const WEBSOCKET_URL = import.meta.env.DEV
+  ? `${PROXY_TARGET.replace('http', 'ws')}`
+  : undefined;
+
 function App() {
   const { games, handleWsMessage, set } = useChessStore()
   const [screen, setScreen] = useState('new')
@@ -30,10 +40,16 @@ function App() {
   useEffect(() => {
     if (!inited) {
       inited = true
-      new UqbarEncryptorApi({ nodeId: window.our.node, channelId: window.our.process, onMessage: handleWsMessage })
+
+      new UqbarEncryptorApi({
+        uri: WEBSOCKET_URL,
+        nodeId: window.our.node,
+        processId: window.our.process,
+        onMessage: handleWsMessage
+      });
     }
 
-    fetch('/chess:chess:uqbar/games').then(res => res.json()).then((games) => {
+    fetch(`${BASE_URL}/games`).then(res => res.json()).then((games) => {
       set({ games })
     }).catch(console.error)
 
@@ -42,7 +58,7 @@ function App() {
   const startNewGame = useCallback(async (e: FormEvent) => {
     e.preventDefault()
     try {
-      const createdGame = await fetch('/chess:chess:uqbar/games', {
+      const createdGame = await fetch(`${BASE_URL}/games`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -100,7 +116,7 @@ function App() {
     allGames[game.id] = gameCopy
     set({ games: allGames })
 
-    fetch('/chess:chess:uqbar/games', {
+    fetch(`${BASE_URL}/games`, {
       method: 'PUT',
       body: JSON.stringify({ id: game.id, move: sourceSquare + targetSquare })
     }).then(r => r.json())
@@ -130,7 +146,7 @@ function App() {
 
     if (!window.confirm('Are you sure you want to resign this game?')) return
 
-    fetch(`/chess:chess:uqbar/games?id=${game.id}`, {
+    fetch(`${BASE_URL}/games?id=${game.id}`, {
       method: 'DELETE',
     }).then(r => r.json())
     .then((updatedGame) => {
@@ -150,7 +166,7 @@ function App() {
     if (!game) return
 
     try {
-      const createdGame = await fetch('/chess:chess:uqbar/games', {
+      const createdGame = await fetch(`${BASE_URL}/games`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -6,12 +6,15 @@
     "dev": "vite",
     "start": "vite",
     "build": "tsc && vite build",
+    "copy": "mkdir -p ../pkg/ui && rm -rf ../pkg/ui/* && cp -r dist/* ../pkg/ui/",
+    "build:copy": "npm run build && npm run copy",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "@react-oauth/google": "^0.11.0",
     "@types/node-forge": "^1.3.5",
+    "@uqbar/client-encryptor-api": "^0.2.1",
     "buffer": "^6.0.3",
     "chess.js": "^1.0.0-beta.6",
     "moment": "^2.29.4",

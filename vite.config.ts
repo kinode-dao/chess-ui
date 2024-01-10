@@ -1,58 +1,67 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import mkcert from 'vite-plugin-mkcert'
 
-// https://vitejs.dev/config/
+/*
+If you are developing a UI outside of an Uqbar project,
+comment out the following 2 lines:
+*/
+// import manifest from '../pkg/manifest.json'
+// import metadata from '../pkg/metadata.json'
+
+/*
+IMPORTANT:
+This must match the process name from pkg/manifest.json + pkg/metadata.json
+The format is "/" + "process_name:package_name:publisher_node"
+*/
+const BASE_URL = '/chess:chess:nectar';
+
+// This is the proxy URL, it must match the node you are developing against
+const PROXY_URL = (process.env.VITE_NODE_URL || 'http://127.0.0.1:8080').replace('localhost', '127.0.0.1');
+
+console.log('process.env.VITE_NODE_URL', process.env.VITE_NODE_URL, PROXY_URL);
+
 export default defineConfig({
-  base: '/chess:chess:uqbar/',
-  plugins: [
-    react(),
-    mkcert(),
-    {
-      name: "configure-response-headers",
-      configureServer: (server) => {
-        server.middlewares.use((_req, res, next) => {
-          // res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-          res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
-          next();
-        });
-      },
-    },
-  ],
+  plugins: [react()],
+  base: BASE_URL,
   build: {
     rollupOptions: {
-      output: {
-        assetFileNames: (assetInfo) => {
-          let extType = assetInfo.name.split('.').at(1);
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-            extType = 'img';
-          }
-          return `chess/static/[name][extname]`;
-        },
-        chunkFileNames: 'chess/static/[name].js',
-        entryFileNames: 'chess/static/[name].js',
-      }
+      external: ['/our.js']
     }
-
   },
   server: {
-    https: false,
+    open: true,
     proxy: {
-      "/encryptor:sys:uqbar": {
-        target: 'http://localhost:8080',
+      '/our': {
+        target: PROXY_URL,
         changeOrigin: true,
-        secure: false,
       },
-      "/qns_indexer:qns_indexer:uqbar/node": {
-        target: 'http://localhost:8080',
+      [`${BASE_URL}/our.js`]: {
+        target: PROXY_URL,
         changeOrigin: true,
-        secure: false,
+        rewrite: (path) => path.replace(BASE_URL, ''),
       },
-      "/chess:chess:uqbar/games": {
-        target: 'http://localhost:8080',
+      // This route will match all other HTTP requests to the backend
+      [`^${BASE_URL}/(?!(@vite/client|src/.*|node_modules/.*|@react-refresh|$))`]: {
+        target: PROXY_URL,
         changeOrigin: true,
-        secure: false,
       },
-    },
-  },
-})
+      // '/example': {
+      //   target: PROXY_URL,
+      //   changeOrigin: true,
+      //   rewrite: (path) => path.replace(BASE_URL, ''),
+      // // This is only for debugging purposes
+      //   configure: (proxy, _options) => {
+      //     proxy.on('error', (err, _req, _res) => {
+      //       console.log('proxy error', err);
+      //     });
+      //     proxy.on('proxyReq', (proxyReq, req, _res) => {
+      //       console.log('Sending Request to the Target:', req.method, req.url);
+      //     });
+      //     proxy.on('proxyRes', (proxyRes, req, _res) => {
+      //       console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+      //     });
+      //   },
+      // },
+    }
+  }
+});
