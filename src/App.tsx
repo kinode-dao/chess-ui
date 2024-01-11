@@ -186,7 +186,7 @@ function App() {
   return (
     <div className='flex flex-col justify-center items-center'>
       <div className='flex flex-col justify-center' style={{ maxHeight: '100vh', maxWidth: '800px', width: '100%', position: 'relative' }}>
-        <a href="/" className='absolute top-6 left-0 m-4' style={{ fontSize: 24, color: 'white' }} onClick={e => { e.preventDefault(); window.history.back() }}>
+        <a href="/" className='absolute top-6 left-0 m-4' style={{ fontSize: 24, color: 'white' }} onClick={e => { e.preventDefault(); window.location.origin }}>
           &#x25c0; Back
         </a>
         <h1 className='m-4'>Chess by Uqbar</h1>

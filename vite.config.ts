@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import mkcert from 'vite-plugin-mkcert'
 
 /*
 If you are developing a UI outside of an Uqbar project,
@@ -21,8 +22,21 @@ const PROXY_URL = (process.env.VITE_NODE_URL || 'http://127.0.0.1:8080').replace
 console.log('process.env.VITE_NODE_URL', process.env.VITE_NODE_URL, PROXY_URL);
 
 export default defineConfig({
-  plugins: [react()],
   base: BASE_URL,
+  plugins: [
+    react(),
+    mkcert(),
+    {
+      name: "configure-response-headers",
+      configureServer: (server) => {
+        server.middlewares.use((_req, res, next) => {
+          // res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+          res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+          next();
+        });
+      },
+    },
+  ],
   build: {
     rollupOptions: {
       external: ['/our.js']
