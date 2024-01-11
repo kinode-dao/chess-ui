@@ -26,16 +26,34 @@ const useChessStore = create<ChessStore>()(
   persist(
     (set, get) => ({
       games: {},
-      handleWsMessage: (json: string) => {
-        try {
-          const { kind, data } = JSON.parse(json) as WsMessage
-          console.log(kind, data)
-
-          if (kind === 'game_update') {
-            set({ games: { ...get().games, [data.id]: data } })
+      handleWsMessage: (json: string | Blob) => {
+        if (typeof json === 'string') {
+          try {
+            const { kind, data } = JSON.parse(json) as WsMessage;
+            if (kind === 'game_update') {
+              set({ games: { ...get().games, [data.id]: data } })
+            }
+          } catch (error) {
+            console.error("Error parsing WebSocket message", error);
           }
-        } catch (error) {
-          console.error("Error parsing WebSocket message", error);
+        } else {
+          const reader = new FileReader();
+
+          reader.onload = function(event) {
+            if (typeof event?.target?.result === 'string') {
+              try {
+                const { kind, data } = JSON.parse(event.target.result) as WsMessage;
+
+                if (kind === 'game_update') {
+                  set({ games: { ...get().games, [data.id]: data } })
+                }
+              } catch (error) {
+                console.error("Error parsing WebSocket message", error);
+              }
+            }
+          };
+
+          reader.readAsText(json);
         }
       },
       set,
