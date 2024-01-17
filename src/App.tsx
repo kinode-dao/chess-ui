@@ -1,28 +1,25 @@
-import { FormEvent, useCallback, useEffect, useMemo, useState, MouseEvent } from 'react'
+import { FormEvent, useCallback, useEffect, useMemo, useState, MouseEvent, useRef } from 'react'
 import { Chess } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import UqbarEncryptorApi from '@uqbar/client-encryptor-api'
 import useChessStore, { Game } from './store';
+import './App.css'
 
 declare global {
   var window: Window & typeof globalThis;
   var our: { node: string, process: string };
 }
 
-import './App.css'
+const BASE_URL = import.meta.env.BASE_URL;
+if (window.our) window.our.process = BASE_URL?.replace("/", "");
 
-let inited = false
+const PROXY_TARGET = `${(import.meta.env.VITE_NODE_URL || "http://localhost:8080")}${BASE_URL}`;
 
 interface SelectedGame extends Game {
   game: Chess
 }
 
 const isTurn = (game: Game, node: string) => (game.turns || 0) % 2 === 0 ? node === game.white : node === game.black
-
-const BASE_URL = import.meta.env.BASE_URL;
-if (window.our) window.our.process = BASE_URL?.replace("/", "");
-
-const PROXY_TARGET = `${(import.meta.env.VITE_NODE_URL || "http://localhost:8080")}${BASE_URL}`;
 
 // This env also has BASE_URL which should match the process + package name
 const WEBSOCKET_URL = import.meta.env.DEV
@@ -33,21 +30,29 @@ function App() {
   const { games, handleWsMessage, set } = useChessStore()
   const [screen, setScreen] = useState('new')
   const [newGame, setNewGame] = useState('')
+  const boardContainerRef = useRef<HTMLDivElement>(null)
+  const [boardWidth, setBoardWidth] = useState(560 - 20)
+
+  const resizeObserver = new ResizeObserver(entries => {
+    for (let entry of entries) {
+      setBoardWidth(Math.min(entry.contentRect.width, entry.contentRect.height)- 16);
+    }
+  });
+
+  if (boardContainerRef.current) {
+    resizeObserver.observe(boardContainerRef.current);
+  }
 
   const game: SelectedGame | undefined = useMemo(() => games[screen] ? ({ ...games[screen], game: new Chess(games[screen].board) }) : undefined, [games, screen])
   const currentTurn = useMemo(() => (game?.turns || 0) % 2 === 0 ? `${game?.white} (white)` : `${game?.black} (black)`, [game])
 
   useEffect(() => {
-    if (!inited) {
-      inited = true
-
-      new UqbarEncryptorApi({
-        uri: WEBSOCKET_URL,
-        nodeId: window.our.node,
-        processId: window.our.process,
-        onMessage: handleWsMessage
-      });
-    }
+    new UqbarEncryptorApi({
+      uri: WEBSOCKET_URL,
+      nodeId: window.our.node,
+      processId: window.our.process,
+      onMessage: handleWsMessage
+    });
 
     fetch(`${BASE_URL}/games`).then(res => res.json()).then((games) => {
       set({ games })
@@ -204,7 +209,7 @@ function App() {
               ))}
             </div>
           </div>}
-          <div className='flex flex-col justify-center items-center' style={{ width: '75%' }}>
+          <div className='flex flex-col justify-center items-center' style={{ width: '75%' }} ref={boardContainerRef}>
             {screen === 'new' || !game ? (
               <>
                 <h2 className='mb-2'>Start New Game</h2>
@@ -226,7 +231,7 @@ function App() {
                     <button className='bg-green-600 hover:bg-green-800 text-white font-bold py-1 px-4 rounded' onClick={resignGame}>Resign</button>
                   )}
                 </div>
-                <Chessboard position={game?.game.fen()} onPieceDrop={onDrop} boardOrientation={game?.white === window.our.node ? 'white' : 'black'} />
+                <Chessboard boardWidth={boardWidth} position={game?.game.fen()} onPieceDrop={onDrop} boardOrientation={game?.white === window.our.node ? 'white' : 'black'} />
               </>
             )}
           </div>
