@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useEffect, useMemo, useState, MouseEvent, useRef } from 'react'
+import { FormEvent, useCallback, useEffect, useMemo, useState, MouseEvent, useRef } from 'react'
 import { Chess } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import UqbarEncryptorApi from '@uqbar/client-encryptor-api'
