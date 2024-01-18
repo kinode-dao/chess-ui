@@ -1,3 +1,3 @@
 # chess-ui
 
-The UI for the Uqbar chess app. This UI is available at /chess:chess:uqbar/ on any Uqbar node.
+The UI for the Kinode chess app. This UI is available at /chess:chess:sys on any Kinode.
