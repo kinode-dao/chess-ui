@@ -198,7 +198,7 @@ function App() {
         <div className='flex flex-row justify-center items-center h-screen border rounded'>
           {Object.keys(games).length > 0 && <div className='flex flex-col border-r' style={{ width: '25%', height: '100%' }}>
             <h3 className='m-2'>Games</h3>
-            <button className='bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 m-2 rounded' onClick={() => setScreen('new')}>New</button>
+            <button className='font-bold py-2 px-4 m-2 rounded' onClick={() => setScreen('new')}>New</button>
             <div className='flex flex-col overflow-scroll'>
               {Object.values(games).map(game => (
                 <div key={game?.id} onClick={() => setScreen(game?.id)}
@@ -216,8 +216,8 @@ function App() {
                 <h4 className='mb-2'>(game creator will be white)</h4>
                 <form onSubmit={startNewGame} className='flex flex-col justify-center mb-40' style={{ maxWidth: 400 }}>
                   <label className='mb-2' style={{ alignSelf: 'flex-start', fontWeight: '600' }}>Player ID</label>
-                  <input className='border rounded p-2 mb-2' style={{ color: 'black' }} type='text' placeholder='Player ID' value={newGame} onChange={e => setNewGame(e.target.value)} />
-                  <button className='bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded' type="submit">Start Game</button>
+                  <input className='border rounded p-2 mb-2' style={{ color: 'black', minWidth: 300 }} type='text' placeholder='Player ID' value={newGame} onChange={e => setNewGame(e.target.value)} />
+                  <button className='font-bold py-2 px-4 rounded' type="submit">Start Game</button>
                 </form>
               </>
             ) : (
@@ -226,9 +226,9 @@ function App() {
                   <h3>{screen}</h3>
                   <h4>{game?.ended ? 'Game Ended' : `Turn: ${currentTurn}`}</h4>
                   {game?.ended ? (
-                    <button className='bg-green-600 hover:bg-green-800 text-white font-bold py-1 px-4 rounded' onClick={rematchGame}>Rematch</button>
+                    <button className='font-bold py-1 px-4 rounded' onClick={rematchGame}>Rematch</button>
                   ) : (
-                    <button className='bg-green-600 hover:bg-green-800 text-white font-bold py-1 px-4 rounded' onClick={resignGame}>Resign</button>
+                    <button className='font-bold py-1 px-4 rounded' onClick={resignGame}>Resign</button>
                   )}
                 </div>
                 <Chessboard boardWidth={boardWidth} position={game?.game.fen()} onPieceDrop={onDrop} boardOrientation={game?.white === window.our.node ? 'white' : 'black'} />
