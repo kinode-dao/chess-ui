@@ -2,18 +2,18 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 /*
-If you are developing a UI outside of an Uqbar project,
+If you are developing a UI outside of a Kinode project,
 comment out the following 2 lines:
 */
-// import manifest from '../pkg/manifest.json'
-// import metadata from '../pkg/metadata.json'
+import manifest from '../pkg/manifest.json'
+import metadata from '../pkg/metadata.json'
 
 /*
 IMPORTANT:
 This must match the process name from pkg/manifest.json + pkg/metadata.json
 The format is "/" + "process_name:package_name:publisher_node"
 */
-const BASE_URL = '/chess:chess:sys';
+const BASE_URL = `/${manifest[0].process_name}:${metadata.package}:${metadata.publisher}`;
 
 // This is the proxy URL, it must match the node you are developing against
 const PROXY_URL = (process.env.VITE_NODE_URL || 'http://127.0.0.1:8080').replace('localhost', '127.0.0.1');
