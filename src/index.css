@@ -3,143 +3,270 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  --text-light: #FFF5D9;
+  --text-dark: #22211F;
+  --text-orange: #FF7533;
+  --orange-light: #F36822;
+  --orange-medium: #F35422;
+  --orange-burnt: #E25F35;
+
+  --medium-gray: 7E7E7E;
+  --gray-button: rgba(253, 245, 220, 0.25);
+  --input-background: rgba(243, 84, 34, 0.25); /* orange-medium */
+}
+
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-Thin.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-ThinItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-ExtraLight.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 200;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-ExtraLightItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 200;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-Light.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-LightItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-Regular.ttf') format('truetype');
+  font-style: normal;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  width: 100%;
-
-  --k-red: #a30101;
-  --k-darkred: #4d0c0c;
-  --k-lightred: #dd0207;
-  --k-petal: #e94f33;
-  --k-lightpetal: #f0907f;
-  --k-yellow: #e6b95e;
-  --k-beige: #e5c4a1;
-  --k-green: #0f6f4c;
-  --k-darkgreen: #29322f;
-  --k-lightgreen: #a0a271;
-  --k-mediumgreen: #424031;
-  --k-black: #281b13;
 }
-
-a {
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-Italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-Medium.ttf') format('truetype');
+  font-style: normal;
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
 }
-a:hover {
-  color: #535bf2;
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-MediumItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-SemiBold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-SemiBoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-BoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-ExtraBold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 800;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-ExtraBoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 800;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-Black.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 900;
+}
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('./fonts/Barlow_Condensed/BarlowCondensed-BlackItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 900;
 }
 
 body {
   margin: 0;
-  display: flex;
-  /* place-items: center; */
-  min-width: 320px;
-  min-height: 100vh;
-  color: white;
-  background-color: var(--k-green);
+  padding: 2em;
+  font-size: 16px;
+  background-color: var(--gray-button);
+  color: var(--text-light);
+  font-weight: 400;
+  background: url('./assets/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  overflow-y: scroll;
 }
 
-button, [type="submit"], [type="button"] {
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+body, h1, h2, h3, h4, h5, h6, p, a, button, input {
+  font-family: 'BarlowCondensed', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.5em;
   font-weight: 500;
-  font-family: inherit;
-  background-color: var(--k-yellow);
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  background-color: var(--k-petal);
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-/* @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+  margin: 0;
 }
 
 h1 {
-  font-size: 3em;
+  font-size: 64px;
 }
-
 h2 {
-  font-size: 2em;
+  font-size: 48px;
 }
-
 h3 {
-  font-size: 1.5em;
+  font-size: 36px;
 }
-
 h4 {
-  font-size: 1.25em;
+  font-size: 24px;
 }
-
 h5 {
+  font-size: 20px;
+}
+h6 {
+  font-size: 16px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+input {
+  all: unset;
+}
+input[type="text"],
+input[type="password"],
+input[type="checkbox"] {
+  padding: 1em;
+  border: 1px solid var(--orange-medium);
+  border-radius: 8px;
+  box-sizing: border-box;
   font-size: 1em;
+  background-color: var(--input-background);
+  color: var(--text-light);
 }
-
-@keyframes colorChange {
-  0%, 100% {
-    background-color: var(--k-yellow); /* Start and end color */
-  }
-  50% {
-    background-color: var(--k-red); /* 2nd rhythmic change */
-  }
+input[type="text"],
+input[type="password"] {
+  width: 100%;
 }
-
-.game-entry {
-  width: calc(100% - 1em);
+input[type="checkbox"] {
+  padding: 0.25em 0.8em;
   cursor: pointer;
-  color: white;
-  background-color: var(--k-red);
-  padding: 0.5em;
-  border-radius: 0.25em;
+}
+input[type="checkbox"]:checked {
+  background-color: var(--orange-medium);
+}
+.checkmark {
+  position: absolute;
+  left: 4px;
+  font-size: 24px;
+  top: -5px;
+  cursor: pointer;
+}
+::placeholder {
+  color: var(--text-light);
+}
+::-webkit-input-placeholder::placeholder {
+  color: var(--text-light);
+}
+::-moz-placeholder::placeholder {
+  color: var(--text-light);
+}
+::-ms-input-placeholder {
+  color: var(--text-light);
+}
+label {
+  font-size: 20px;
 }
 
-.game-entry.is-turn {
-  animation: colorChange 3s infinite;
+button, [type='button'], [type='reset'], [type='submit'] {
+  width: 100%;
+  padding: 0.75em 1em;
+  margin: 0;
+  font-weight: 500;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--orange-medium);
+  /* border-image: linear-gradient(to right, var(--orange-medium), var(--orange-light)); */
+  border-radius: 8px;
+  background: var(--orange-medium);
+  box-sizing: border-box;
+  cursor: pointer;
+  font-size: 1.125em;
+  transition: all 0.1s;
+  box-shadow: 0 1px 2px var(--orange-light);
+  color: var(--text-light);
 }
 
-.game-entry.is-turn:hover {
-  animation: none;
+button.alt {
+  background-color: var(--text-light);
+  color: var(--text-dark);
+  border-color: var(--text-light);
+  box-shadow: 0 1px 2px var(--text-light);
 }
 
-.game-entry.selected {
-  background-color: var(--k-petal);
+button:hover {
+  opacity: 0.9;
+  box-shadow: none;
 }
 
-.game-entry.is-ended {
-  background-color: lightgray;
-  color: gray;
-}
-
-.game-entry:hover {
-  background-color: var(--k-petal);
+button:disabled {
+  background-color: var(--medium-gray);
+  border: 1px solid var(--medium-gray);
+  box-shadow: 0 1px 2px var(--medium-gray);
+  opacity: 0.7;
+  cursor: not-allowed;
 }
