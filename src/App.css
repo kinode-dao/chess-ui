@@ -3,6 +3,7 @@
   margin: 0 auto;
   text-align: center;
   width: 100%;
+  height: 100%;
 }
 
 .logo {
@@ -39,4 +40,59 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.game, .games {
+  background-color: var(--input-background);
+  border-radius: 1em;
+}
+
+.orange-text {
+  color: var(--orange-medium);
+}
+
+button.small {
+  padding: 0.25em .5em;
+  font-size: 1em;
+  border-radius: 0.5em;
+  width: 100px;
+}
+
+@keyframes colorChange {
+  0%, 100% {
+    background-color: var(--text-dark); /* Start and end color */
+  }
+  50% {
+    background-color: var(--orange-light); /* 2nd rhythmic change */
+  }
+}
+
+.game-entry {
+  width: 100%;
+  cursor: pointer;
+  color: white;
+  background-color: var(--orange-medium);
+  padding: 0.5em;
+  border-radius: 0.25em;
+}
+
+.game-entry.is-turn {
+  animation: colorChange 3s infinite;
+}
+
+.game-entry.is-turn:hover {
+  animation: none;
+}
+
+.game-entry.selected {
+  background-color: var(--orange-light);
+}
+
+.game-entry.is-ended {
+  background-color: lightgray;
+  color: gray;
+}
+
+.game-entry:hover {
+  background-color: var(--orange-light);
 }
