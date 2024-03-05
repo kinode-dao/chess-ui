@@ -357,7 +357,7 @@ function App() {
           )}
           <div
             className="flex flex-col justify-center items-center game"
-            style={{ width: "72%", height: "100%"}}
+            style={{ width: Object.keys(games).length > 0 ? "calc(75% - 16px)" : "100%", height: "100%"}}
             ref={boardContainerRef}
           >
             {screen === "new" || !game ? (
